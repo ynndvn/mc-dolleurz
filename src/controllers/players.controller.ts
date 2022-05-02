@@ -3,11 +3,10 @@ import { get } from "../helpers/money.helper";
 import { mongo } from "../helpers/mongo";
 import { Player } from "../interfaces/players.interface";
 
+const collection = config.mongo.collections.players;
+
 export const getExistingPlayer = async (uuid: string): Promise<Player> => {
-  const existing = await mongo.findOne<Player>(
-    config.mongo.collections.players,
-    { uuid }
-  );
+  const existing = await mongo.findOne<Player>(collection, { uuid });
   if (!existing) {
     throw new Error("Utilisateur inexistant");
   }
@@ -21,14 +20,11 @@ export const create = async (uuid: string, nickname: string) => {
   if (!nickname) {
     throw new Error("Nom manquant");
   }
-  const existing = await mongo.findOne<Player>(
-    config.mongo.collections.players,
-    { uuid }
-  );
+  const existing = await mongo.findOne<Player>(collection, { uuid });
   if (existing) {
     throw new Error("Utilisateur existant");
   }
-  return mongo.insertOne<Player>(config.mongo.collections.players, {
+  return mongo.insertOne<Player>(collection, {
     uuid,
     nickname,
     balance: 0,
@@ -41,7 +37,7 @@ export const updateOne = async (uuid: string, update: Partial<Player>) => {
   }
   await getExistingPlayer(uuid);
   return mongo.updateOne<Player>(
-    config.mongo.collections.players,
+    collection,
     {
       uuid,
     },
@@ -70,7 +66,7 @@ export const addToBalance = async (
     );
   }
   await mongo.updateOne<Player>(
-    config.mongo.collections.players,
+    collection,
     {
       uuid,
     },
@@ -79,4 +75,8 @@ export const addToBalance = async (
     }
   );
   return balance;
+};
+
+export const getAll = async (): Promise<Array<Player>> => {
+  return mongo.find<Player>(collection, {});
 };

@@ -64,4 +64,14 @@ router.post("/:uuid/balance/remove", async (req, res) => {
   }
 });
 
+router.get("/", async (_req, res) => {
+  try {
+    const players = await playersController.getAll();
+    res.status(200).send(players);
+  } catch (err: any) {
+    console.error(err.stack);
+    res.status(400).json({ message: err.message });
+  }
+});
+
 export default router;
