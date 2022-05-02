@@ -1,0 +1,20 @@
+{
+  "port": 4000,
+  "unit": "Bitcoin",
+  "units": "Bitcoins",
+  "buySellRatio": 0.65,
+  "mongo": {
+    "host": "localhost",
+    "port": 27017,
+    "auth": {
+      "user": "",
+      "password": ""
+    },
+    "database": "",
+    "collections": {
+      "players": "players",
+      "offers": "offers",
+      "transactions": "transactions"
+    }
+  }
+}

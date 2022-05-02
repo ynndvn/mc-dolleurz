@@ -1,0 +1,10 @@
+{
+    "env": {
+        "NODE_ENV": "DEV"
+    },
+    "watch": [
+        "src"
+    ],
+    "ext": "ts",
+    "exec": "ts-node --project tsconfig.json src/app.ts"
+}
