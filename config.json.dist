@@ -14,7 +14,8 @@
     "collections": {
       "players": "players",
       "offers": "offers",
-      "transactions": "transactions"
+      "transactions": "transactions",
+      "stocks": "stocks"
     }
   }
 }

@@ -2,6 +2,7 @@ import { config } from "../config";
 import { mongo } from "../helpers/mongo";
 import { Offer } from "../interfaces/offers.interface";
 import { addToBalance, getExistingPlayer } from "./players.controller";
+import { addToStock, checkAvailability } from "./stocks.controller";
 
 const collection = config.mongo.collections.offers;
 
@@ -22,7 +23,7 @@ export const create = async (name: string, price: number) => {
 };
 
 export const del = async (name: string) => {
-  await getExistingOffer(name)
+  await getExistingOffer(name);
   return mongo.deleteOne<Offer>(collection, { name });
 };
 
@@ -44,7 +45,9 @@ export const buy = async (
   }
   const existingOffer = await getExistingOffer(name);
   const totalPrice = existingOffer.price * order.amount;
+  await checkAvailability(name, order.amount);
   await addToBalance(order.userId, totalPrice * -1);
+  await addToStock(name, order.amount * -1);
   const newUserInfos = await getExistingPlayer(order.userId);
   return newUserInfos.balance;
 };
@@ -59,6 +62,7 @@ export const sell = async (
   const existingOffer = await getExistingOffer(name);
   const totalPrice = existingOffer.price * order.amount * config.buySellRatio;
   await addToBalance(order.userId, totalPrice);
+  await addToStock(name, order.amount);
   const newUserInfos = await getExistingPlayer(order.userId);
   return newUserInfos.balance;
 };

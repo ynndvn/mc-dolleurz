@@ -6,6 +6,7 @@ import { config } from "./config";
 import playersRouter from "./routes/players.route";
 import offersRouter from "./routes/offers.route";
 import transactionsRouter from "./routes/transactions.route";
+import stocksRouter from "./routes/stocks.route";
 import { mongo } from "./helpers/mongo";
 
 var app = express();
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 app.use("/players", playersRouter);
 app.use("/offers", offersRouter);
 app.use("/transactions", transactionsRouter);
+app.use("/stocks", stocksRouter);
 
 const init = async () => {
   await mongo.connect();

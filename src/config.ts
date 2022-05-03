@@ -18,6 +18,7 @@ const defaultConfig = {
       players: "players",
       offers: "offers",
       transactions: "transactions",
+      stocks: "stocks",
     },
   },
 };
