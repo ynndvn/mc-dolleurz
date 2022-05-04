@@ -1,0 +1,5 @@
+shell.run("rm script.lua")
+shell.run("rm commons.lua")
+shell.run("pastebin get XRkycQS3 script.lua")
+shell.run("pastebin get iZ1sTQ2Q commons.lua")
+shell.run("script.lua")

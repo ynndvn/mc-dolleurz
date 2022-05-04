@@ -1,5 +1,6 @@
 import express from "express";
 import * as playersController from "../controllers/players.controller";
+import { get } from "../helpers/money.helper";
 
 const router = express.Router();
 
@@ -54,7 +55,7 @@ router.get("/", async (_req, res) => {
     const players = await playersController.getAll();
     res
       .status(200)
-      .send(players.map((player) => `${player.nickname} : ${player.balance}`));
+      .send(players.map((player) => `${player.nickname} : ${get(player.balance)}`).join("|"));
   } catch (err: any) {
     console.error(err.stack);
     res.status(400).json({ message: err.message });

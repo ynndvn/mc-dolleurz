@@ -1,18 +1,16 @@
-function post (route, body) 
-  local headers = nil
-  if #body > 0 then
-    headers = { ["Content-Type"] = "application/json" }
-  end
-  local result = http.post("https://mc.ydav.in" .. route, body, headers)
-  return result
-end
+dofile("./commons.lua")
 
--- local chatBox = peripheral.wrap("chatBox_0")
- 
--- chatBox.sendMessage("Oh oui le zizi", "BANQUE")
- 
-local detector = peripheral.wrap("playerDetector_1")
+local chatBox = getPeripheral("chatBox")
+local monitor = getPeripheral("monitor")
+local detector = getPeripheral("playerDetector")
+
+cl(monitor)
+prompt(monitor, "Fais un clic droit sur la    tête pour créer ton compte   bancaire !")
+
 while true do
   event, username = os.pullEvent("playerClick")
-  post("/players", '{"nickname": "' .. username .. '"}')
+  result = post("/players", '{"nickname": "' .. username .. '"}')
+  if result ~= nil then
+    chatBox.sendMessage("Le compte bancaire de " .. username .. " a bien été créé.", "BANQUE")
+  end
 end
