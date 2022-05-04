@@ -5,58 +5,38 @@ import { Player } from "../interfaces/players.interface";
 
 const collection = config.mongo.collections.players;
 
-export const getExistingPlayer = async (uuid: string): Promise<Player> => {
-  const existing = await mongo.findOne<Player>(collection, { uuid });
+export const getExistingPlayer = async (nickname: string): Promise<Player> => {
+  const existing = await mongo.findOne<Player>(collection, { nickname });
   if (!existing) {
     throw new Error("Utilisateur inexistant");
   }
   return existing;
 };
 
-export const create = async (uuid: string, nickname: string) => {
-  if (!uuid) {
-    throw new Error("UUID manquant");
-  }
+export const create = async (nickname: string) => {
   if (!nickname) {
     throw new Error("Nom manquant");
   }
-  const existing = await mongo.findOne<Player>(collection, { uuid });
+  const existing = await mongo.findOne<Player>(collection, { nickname });
   if (existing) {
     throw new Error("Utilisateur existant");
   }
   return mongo.insertOne<Player>(collection, {
-    uuid,
     nickname,
     balance: 0,
   });
 };
 
-export const updateOne = async (uuid: string, update: Partial<Player>) => {
-  if (!uuid) {
-    throw new Error("UUID manquant");
-  }
-  await getExistingPlayer(uuid);
-  return mongo.updateOne<Player>(
-    collection,
-    {
-      uuid,
-    },
-    {
-      $set: update,
-    }
-  );
-};
-
-export const getBalance = async (uuid: string): Promise<number> => {
-  const existing = await getExistingPlayer(uuid);
+export const getBalance = async (nickname: string): Promise<number> => {
+  const existing = await getExistingPlayer(nickname);
   return existing.balance;
 };
 
 export const addToBalance = async (
-  uuid: string,
+  nickname: string,
   amount: number
 ): Promise<number> => {
-  const existing = await getExistingPlayer(uuid);
+  const existing = await getExistingPlayer(nickname);
   const balance = existing.balance + amount;
   if (balance < 0) {
     throw new Error(
@@ -68,7 +48,7 @@ export const addToBalance = async (
   await mongo.updateOne<Player>(
     collection,
     {
-      uuid,
+      nickname,
     },
     {
       $set: { balance },

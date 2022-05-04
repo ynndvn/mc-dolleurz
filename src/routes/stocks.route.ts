@@ -6,7 +6,9 @@ const router = express.Router();
 router.get("/", async (_req, res) => {
   try {
     const stocks = await stocksController.get();
-    res.status(200).json(stocks);
+    res
+      .status(200)
+      .json(stocks.map((stock) => `${stock.item} : ${stock.quantity}`));
   } catch (err: any) {
     console.error(err.stack);
     res.status(400).json({ message: err.message });

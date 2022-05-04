@@ -1,5 +1,6 @@
 import express from "express";
 import * as offersController from "../controllers/offers.controller";
+import { get } from "../helpers/money.helper";
 
 const router = express.Router();
 
@@ -42,7 +43,9 @@ router.put("/:name/price/:price", async (req, res) => {
 router.get("/", async (_req, res) => {
   try {
     const offers = await offersController.get();
-    res.status(200).json(offers);
+    res
+      .status(200)
+      .json(offers.map((offer) => `${offer.name} : ${get(offer.price)}`));
   } catch (err: any) {
     console.error(err.stack);
     res.status(400).json({ message: err.message });

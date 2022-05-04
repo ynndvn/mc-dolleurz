@@ -6,7 +6,7 @@
 
 #### I.1.a. Création d'utilisateur
 
-Route: `POST /players/:uuid`
+Route: `POST /players`
 
 Body:
 
@@ -16,8 +16,6 @@ Body:
 }
 ```
 
-L'UUID correspond à l'UUID fourni par Mojang si on y a accès. Le nickname sera le pseudo affiché pour les transactions.
-Une vérif de duplication sera à faire avant l'insertion.
 Crée l'objet utilisateur en base avec sa balance à 0.
 
 #### I.1.b. Renommage d'utilisateur

@@ -10,7 +10,7 @@ export const create = async (from: string, to: string, amount: number) => {
   if (!to) {
     throw new Error("to manquant");
   }
-  if (amount < 0) {
+  if (amount < 0 || isNaN(amount)) {
     throw new Error("T'as voulu voler de l'argent à qui pelo");
   }
   await Promise.all([getExistingPlayer(from), getExistingPlayer(to)]);

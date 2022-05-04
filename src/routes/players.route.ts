@@ -3,12 +3,9 @@ import * as playersController from "../controllers/players.controller";
 
 const router = express.Router();
 
-router.post("/:uuid", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const player = await playersController.create(
-      req.params.uuid,
-      req.body.nickname
-    );
+    const player = await playersController.create(req.body.nickname);
     res.status(201).json(player);
   } catch (err: any) {
     console.error(err.stack);
@@ -16,21 +13,9 @@ router.post("/:uuid", async (req, res) => {
   }
 });
 
-router.put("/:uuid/nickname/:nickname", async (req, res) => {
+router.get("/:nickname/balance", async (req, res) => {
   try {
-    await playersController.updateOne(req.params.uuid, {
-      nickname: req.params.nickname,
-    });
-    res.sendStatus(204);
-  } catch (err: any) {
-    console.error(err.stack);
-    res.status(400).json({ message: err.message });
-  }
-});
-
-router.get("/:uuid/balance", async (req, res) => {
-  try {
-    const balance = await playersController.getBalance(req.params.uuid);
+    const balance = await playersController.getBalance(req.params.nickname);
     res.status(200).send(balance.toFixed(2));
   } catch (err: any) {
     console.error(err.stack);
@@ -38,10 +23,10 @@ router.get("/:uuid/balance", async (req, res) => {
   }
 });
 
-router.post("/:uuid/balance/add", async (req, res) => {
+router.post("/:nickname/balance/add", async (req, res) => {
   try {
     const balance = await playersController.addToBalance(
-      req.params.uuid,
+      req.params.nickname,
       req.body.amount ?? 0
     );
     res.status(200).send(balance.toFixed(2));
@@ -51,10 +36,10 @@ router.post("/:uuid/balance/add", async (req, res) => {
   }
 });
 
-router.post("/:uuid/balance/remove", async (req, res) => {
+router.post("/:nickname/balance/remove", async (req, res) => {
   try {
     const balance = await playersController.addToBalance(
-      req.params.uuid,
+      req.params.nickname,
       (req.body.amount ?? 0) * -1
     );
     res.status(200).send(balance.toFixed(2));
@@ -67,7 +52,9 @@ router.post("/:uuid/balance/remove", async (req, res) => {
 router.get("/", async (_req, res) => {
   try {
     const players = await playersController.getAll();
-    res.status(200).send(players);
+    res
+      .status(200)
+      .send(players.map((player) => `${player.nickname} : ${player.balance}`));
   } catch (err: any) {
     console.error(err.stack);
     res.status(400).json({ message: err.message });
