@@ -45,7 +45,7 @@ router.get("/", async (_req, res) => {
     const offers = await offersController.get();
     res
       .status(200)
-      .json(offers.map((offer) => `${offer.name}^${get(offer.price)}`).join("|"));
+      .json(offers);
   } catch (err: any) {
     console.error(err.stack);
     res.status(400).json({ message: err.message });
