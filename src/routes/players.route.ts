@@ -55,7 +55,7 @@ router.get("/", async (_req, res) => {
     const players = await playersController.getAll();
     res
       .status(200)
-      .send(players.map((player) => `${player.nickname} : ${get(player.balance)}`).join("|"));
+      .send(players.map((player) => `${player.nickname}:${get(player.balance)}`).join("|"));
   } catch (err: any) {
     console.error(err.stack);
     res.status(400).json({ message: err.message });
