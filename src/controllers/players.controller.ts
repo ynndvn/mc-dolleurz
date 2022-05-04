@@ -58,5 +58,5 @@ export const addToBalance = async (
 };
 
 export const getAll = async (): Promise<Array<Player>> => {
-  return mongo.find<Player>(collection, {});
+  return mongo.find<Player>(collection, {}, {sort: {balance: -1}});
 };

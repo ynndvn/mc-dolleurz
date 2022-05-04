@@ -17,7 +17,7 @@ while true do
   elseif message == "balance" then
     local balance = get("/players/" .. from .. "/balance")
     if balance ~= nil then
-      chatBox.sendMessage("Balance de " .. from .. " : " .. balance .. " Floydies", "BANQUE")
+      chatBox.sendMessage("Balance de " .. from .. " : " .. balance.readAll() .. " Floydies", "BANQUE")
     end
   end
 end
