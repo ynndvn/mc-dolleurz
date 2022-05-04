@@ -1,11 +1,7 @@
 -- PERIPHERALS
 
 function getPeripheral (name) 
-  local result = peripheral.find(name)
-  if result == nil then
-    print("Périphérique " .. name .. " introuvable.")
-    os.exit()
-  end
+  local result = peripheral.find(name) or error("Périphérique " .. name .. " introuvable.", 0)
   return result
 end
 
@@ -42,7 +38,7 @@ end
 
 -- MONITORS
 
-function prompt (monit, text)
+function prompt (monit, text, center)
     local x, y = monit.getCursorPos()
     local width, height = monit.getSize()
     
@@ -52,6 +48,9 @@ function prompt (monit, text)
     end
     for i = 1, lines, 1 do
         local substr = string.sub(text, width * (i - 1) + 1, width * i)
+        if center == true then
+          monit.setCursorPos(math.ceil((width - #text) / 2), y)
+        end
         monit.write(substr)
         monit.setCursorPos(1, y % height + i)
     end
@@ -61,3 +60,5 @@ function cl(monitor)
     monitor.clear()
     monitor.setCursorPos(1,1)
 end
+
+reloadProtocol = "reloadDisplay"

@@ -1,5 +1,7 @@
 dofile("./commons.lua")
 
+rednet.open("top")
+
 local chatBox = getPeripheral("chatBox")
 
 while true do
@@ -13,6 +15,7 @@ while true do
       chatBox.sendMessage("Erreur lors du transfert ! T'as assez de thunes pelo ?", "BANQUE")
     else
       chatBox.sendMessage(from .. " a transféré " .. amount .. " Floydies sur le compte de " .. to, "BANQUE")
+      rednet.broadcast("reload", reloadProtocol)
     end
   elseif message == "balance" then
     local balance = get("/players/" .. from .. "/balance")

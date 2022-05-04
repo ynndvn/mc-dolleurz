@@ -4,6 +4,9 @@ function display (input, monitor)
   local lines = split(input, "|")
   local nickLength = 0
   local balanceLength = 0
+  local width, height = monitor.getSize()
+
+  monitor.setCursorPos(1, math.ceil((height - #lines) / 2))
   for i,l in pairs(lines) do
     local infos = split(l, ":")
     if #infos[1] > nickLength then
@@ -15,21 +18,33 @@ function display (input, monitor)
   end
 
   for i,l in pairs(lines) do
-    local infos = split(l, " : ")
+    local infos = split(l, ":")
     local sizedNick = string.sub(infos[1] .. string.rep(" ", nickLength), 1, nickLength)
-    local sizedBalance = string.sub(infos[2] .. string.rep(" ", balanceLength), 1, balanceLength)
-    prompt(monitor, sizedNick .. " : " .. sizedBalance)
+    local spacesToAdd = balanceLength - #infos[2]
+    local sizedBalance = string.rep(" ", spacesToAdd) .. infos[2]
+    prompt(monitor, sizedNick .. " : " .. sizedBalance, true)
   end
 end
 
 local monitor = getPeripheral("monitor")
-cl(monitor)
-monitor.setTextScale(2)
 
-local result = get("/players")
+function reloadDisplay()
+  cl(monitor)
+  prompt(monitor, "Balances", true)
+  monitor.setTextScale(1.5)
+  local result = get("/players")
 
-if result == nil then
-  prompt(monitor, "Ça marche pas oh")
-else
-  display(result.readAll(), monitor)
+  if result == nil then
+    prompt(monitor, "Ça marche pas oh")
+  else
+    display(result.readAll(), monitor)
+  end
+end
+
+reloadDisplay()
+
+rednet.open("left")
+while true do
+  local senderId, message, protocol = rednet.receive(reloadProtocol)
+  reloadDisplay()
 end
