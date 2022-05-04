@@ -19,7 +19,7 @@ end
 
 function getOffers ()
   local result = get("/offers")
-  local lines = split(result.readAll(), "|")
+  local lines = textutils.unserializeJSON(result.readAll())
   
   local stocks = bridge.listItems()
   print(textutils.serializeJSON(lines))
