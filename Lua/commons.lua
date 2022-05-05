@@ -5,6 +5,15 @@ function getPeripheral (name)
   return result
 end
 
+function getClosestPlayer(detector) 
+  local players = detector.getPlayersInRange(3)
+  if #players == 0 then
+    user = ""
+  else
+    user = players[1]
+  end
+end
+
 -- STRING
 
 function starts(String,Start)
@@ -83,6 +92,25 @@ function cl(monitor)
     monitor.setCursorPos(1,1)
 end
 
+function writeText(monit, coords, text, color)
+  if color ~= nil then
+    monit.setTextColor(color)
+  end
+  monit.setCursorPos(coords.left[1], coords.left[2])
+  monit.setTextColor(colors.white)
+  monit.write(text)
+end
+
+function isWithinCoords (xPos, yPos, coords)
+  if xPos >= coords.left[1] 
+    and xPos <= coords.right[1] 
+    and yPos >= coords.left[2] 
+    and yPos <= coords.right[2] then
+    return true
+  end
+  return false
+end
+
 -- MISC
 
 function sortObject(obj)
@@ -101,4 +129,9 @@ function initButtonCoords()
   return { left = { 0, 0 }, right = { 0, 0 } }
 end
 
+function getMinMax(val, min, max)
+  return math.min(math.max(val, min), max)
+end
+
 reloadProtocol = "reloadDisplay"
+sellBuyRatio = 0.65

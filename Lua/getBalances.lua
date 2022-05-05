@@ -45,6 +45,11 @@ reloadDisplay()
 
 rednet.open("left")
 while true do
-  local senderId, message, protocol = rednet.receive(reloadProtocol)
-  reloadDisplay()
+  local event, a, b, eventName = os.pullEvent()
+  if event == "rednet_message" then
+    print(eventName)
+    if eventName == reloadProtocol then
+      reloadDisplay()
+    end
+  end
 end
