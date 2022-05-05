@@ -10,7 +10,7 @@ function definePrice()
   if item == nil then
     print("T'as rien dans la main bg")
   end
-  post("/offers/" .. item.name, '{"price": 0' .. price .. '}')
+  post("/offers/" .. item.name, '{"price": ' .. price .. '}')
   rednet.broadcast("reload", "reload_buy")
   print(item.name .. " : " .. price .. " F/u")
 end
