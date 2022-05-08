@@ -102,6 +102,9 @@ function getOffers ()
   local lines = textutils.unserializeJSON(result.readAll())
   h = height - 3
   local stocks = bridge.listItems()
+  table.sort(stocks, function (left, right)
+    return right.displayName > left.displayName
+  end)
   local returnValue = {}
 
   for i,s in pairs(sortObject(stocks)) do
@@ -133,7 +136,6 @@ function getModalCoords()
 end
 
 function placePlus(qty, modalCoords, i) 
-  print(qty, i)
   local len = #("" .. qty)
   modalButtons.plus[qty] = {
     left = { modalCoords.topLeft[1] + math.floor(modalWidth / 4) - len, modalCoords.topLeft[2] + i + 2 },
